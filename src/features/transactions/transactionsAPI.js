@@ -11,3 +11,9 @@ export const postTransaction = async (data) => {
 
 	return response.data;
 };
+
+export const updateTransaction = async (id, data) => {
+	const res = await axiosInstance.patch(`/transactions/${id}`, data);
+
+	return res.data;
+};

@@ -33,6 +33,15 @@ export const addTransaction = createAsyncThunk(
 	}
 );
 
+export const modifyTransaction = createAsyncThunk(
+	'transactions/modifyTransaction',
+	async ({ id, data }) => {
+		const modifiedData = await updateTransaction(id, data);
+
+		return modifiedData;
+	}
+);
+
 // create transactions slice
 const transactionsSlice = createSlice({
 	name: 'transactions',
@@ -70,6 +79,27 @@ const transactionsSlice = createSlice({
 				state.transactions = action.payload;
 			})
 			.addCase(getTransactions.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.error = action.error.message;
+			});
+
+		// modify transaction
+		builder
+			.addCase(modifyTransaction.pending, (state) => {
+				state.isError = false;
+				state.isLoading = true;
+			})
+			.addCase(modifyTransaction.fulfilled, (state, action) => {
+				state.isLoading = false;
+
+				const index = state.transactions.findIndex(
+					(t) => t.id === action.payload.id
+				);
+
+				state.transactions[index] = action.payload;
+			})
+			.addCase(modifyTransaction.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.error = action.error.message;

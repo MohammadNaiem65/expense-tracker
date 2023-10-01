@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	addTransaction,
+	modifyTransaction,
 	setEditModeDetails,
 } from '../../features/transactions/transactionsSlice';
 
@@ -31,6 +32,17 @@ export default function TransactionForm({ editMode, setEditMode }) {
 
 	const handleEditTransaction = (e) => {
 		e.preventDefault();
+
+		const data = {
+			name,
+			type,
+			amount,
+		};
+
+		dispatch(modifyTransaction({ id: editTransactionDetails.id, data }));
+
+		dispatch(setEditModeDetails({}));
+		setEditMode(false);
 	};
 
 	const handleCancelEditTransaction = () => {
@@ -38,6 +50,7 @@ export default function TransactionForm({ editMode, setEditMode }) {
 		dispatch(setEditModeDetails({}));
 	};
 
+	// update data to edit transaction
 	useEffect(() => {
 		if (editTransactionDetails.id) {
 			setName(editTransactionDetails.name);
