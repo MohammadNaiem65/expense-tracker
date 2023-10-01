@@ -1,51 +1,91 @@
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addTransaction } from '../../features/transactions/transactionsSlice';
+
 export default function TransactionForm() {
-    return (
-		<div className='form'>
+	// ! Required hooks and variables
+	const dispatch = useDispatch();
+
+	const [name, setName] = useState('');
+	const [type, setType] = useState('');
+	const [amount, setAmount] = useState('');
+
+	const handlePostTransaction = (e) => {
+		e.preventDefault();
+
+		const data = {
+			name,
+			type,
+			amount,
+		};
+
+		dispatch(addTransaction(data));
+	};
+
+	return (
+		<form className='form' onSubmit={handlePostTransaction}>
 			<h3>Add new transaction</h3>
 
 			<div className='form-group'>
-				<label htmlFor='transaction_name'>Name</label>
+				<label htmlFor='name'>Name</label>
 				<input
 					type='text'
-					name='transaction_name'
+					name='name'
 					placeholder='My Salary'
+					required
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+					className='px-3 py-1'
 				/>
 			</div>
 
 			<div className='form-group radio'>
-				<label htmlFor='transaction_type'>Type</label>
+				<label htmlFor='type'>Type</label>
 				<div className='radio_group'>
 					<input
 						type='radio'
 						value='income'
-						name='transaction_type'
-						checked
+						name='type'
+						required
+						checked={type === 'income'}
+						onChange={() => setType('income')}
+						className='ml-3'
 					/>
-					<label htmlFor='transaction_type'>Income</label>
+					<label htmlFor='type'>Income</label>
 				</div>
 				<div className='radio_group'>
 					<input
 						type='radio'
 						value='expense'
-						name='transaction_type'
+						name='type'
 						placeholder='Expense'
+						checked={type === 'expense'}
+						onChange={() => setType('expense')}
 					/>
 					<label htmlFor='transaction_type'>Expense</label>
 				</div>
 			</div>
 
 			<div className='form-group'>
-				<label htmlFor='transaction_amount'>Amount</label>
+				<label htmlFor='amount'>Amount</label>
 				<input
 					type='number'
-					placeholder='300'
-					name='transaction_amount'
+					placeholder='00'
+					name='amount'
+					required
+					value={amount}
+					onChange={(e) => setAmount(parseInt(e.target.value))}
+					className='px-3 py-1'
 				/>
 			</div>
 
-			<button className='btn'>Add Transaction</button>
+			<button type='submit' className='btn bg-[#4338ca]'>
+				Add Transaction
+			</button>
 
-			<button className='btn cancel_edit'>Cancel Edit</button>
-		</div>
+			<button type='submit' className='btn cancel_edit'>
+				Cancel Edit
+			</button>
+		</form>
 	);
 }
