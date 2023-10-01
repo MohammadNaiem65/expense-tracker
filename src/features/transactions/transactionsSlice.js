@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { postTransaction, readTransactions } from './transactionsAPI';
+import {
+	postTransaction,
+	readTransactions,
+	updateTransaction,
+} from './transactionsAPI';
 
 // initial state
 const initialState = {
@@ -7,6 +11,7 @@ const initialState = {
 	isLoading: false,
 	isError: false,
 	error: '',
+	editTransactionDetails: {},
 };
 
 // async thunks
@@ -32,6 +37,11 @@ export const addTransaction = createAsyncThunk(
 const transactionsSlice = createSlice({
 	name: 'transactions',
 	initialState,
+	reducers: {
+		setEditModeDetails: (state, action) => {
+			state.editTransactionDetails = action.payload;
+		},
+	},
 	extraReducers: (builder) => {
 		// add transaction
 		builder
@@ -68,3 +78,4 @@ const transactionsSlice = createSlice({
 });
 
 export default transactionsSlice.reducer;
+export const { setEditModeDetails } = transactionsSlice.actions;

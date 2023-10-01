@@ -3,7 +3,7 @@ import Transaction from '../Transaction/Transaction';
 import { useEffect } from 'react';
 import { getTransactions } from '../../features/transactions/transactionsSlice';
 
-export default function AllTransactions() {
+export default function AllTransactions({ setEditMode }) {
 	// ! Required hooks and variables
 	const dispatch = useDispatch();
 	const { transactions, isLoading, isError, error } = useSelector(
@@ -31,7 +31,11 @@ export default function AllTransactions() {
 		);
 	} else if (!isLoading && transactions.length > 0) {
 		content = transactions.map((transaction) => (
-			<Transaction key={transaction.id} details={transaction} />
+			<Transaction
+				key={transaction.id}
+				details={transaction}
+				setEditMode={setEditMode}
+			/>
 		));
 	}
 

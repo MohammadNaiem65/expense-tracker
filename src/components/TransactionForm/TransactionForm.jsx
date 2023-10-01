@@ -1,9 +1,15 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addTransaction } from '../../features/transactions/transactionsSlice';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	addTransaction,
+	setEditModeDetails,
+} from '../../features/transactions/transactionsSlice';
 
-export default function TransactionForm() {
+export default function TransactionForm({ editMode, setEditMode }) {
 	// ! Required hooks and variables
+	const { editTransactionDetails } = useSelector(
+		(state) => state.transactions
+	);
 	const dispatch = useDispatch();
 
 	const [name, setName] = useState('');
@@ -20,11 +26,37 @@ export default function TransactionForm() {
 		};
 
 		dispatch(addTransaction(data));
+		e.target.reset();
 	};
 
+	const handleEditTransaction = (e) => {
+		e.preventDefault();
+	};
+
+	const handleCancelEditTransaction = () => {
+		setEditMode(false);
+		dispatch(setEditModeDetails({}));
+	};
+
+	useEffect(() => {
+		if (editTransactionDetails.id) {
+			setName(editTransactionDetails.name);
+			setType(editTransactionDetails.type);
+			setAmount(editTransactionDetails.amount);
+		} else {
+			setName('');
+			setType('');
+			setAmount('');
+		}
+	}, [editTransactionDetails]);
+
 	return (
-		<form className='form' onSubmit={handlePostTransaction}>
-			<h3>Add new transaction</h3>
+		<form
+			className='form'
+			onSubmit={editMode ? handleEditTransaction : handlePostTransaction}>
+			<h3 className='text-center'>
+				{editMode ? 'Edit Transaction' : 'Add new Transaction'}
+			</h3>
 
 			<div className='form-group'>
 				<label htmlFor='name'>Name</label>
@@ -80,12 +112,16 @@ export default function TransactionForm() {
 			</div>
 
 			<button type='submit' className='btn bg-[#4338ca]'>
-				Add Transaction
+				{editMode ? 'Edit Transaction' : 'Add Transaction'}
 			</button>
 
-			<button type='submit' className='btn cancel_edit'>
-				Cancel Edit
-			</button>
+			{editMode && (
+				<button
+					className='btn cancel_edit'
+					onClick={handleCancelEditTransaction}>
+					Cancel Edit
+				</button>
+			)}
 		</form>
 	);
 }

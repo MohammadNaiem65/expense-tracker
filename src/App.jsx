@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import './App.css';
 import AllTransactions from './components/AllTransactions/AllTransactions';
 import TransactionForm from './components/TransactionForm/TransactionForm';
 
 function App() {
+	// ! Required hooks and variables
+	const [editMode, setEditMode] = useState(false);
 	return (
 		<div className='App'>
 			{/* Header */}
@@ -21,11 +24,14 @@ function App() {
 						</h3>
 					</div>
 
-					<TransactionForm />
+					<TransactionForm
+						editMode={editMode}
+						setEditMode={setEditMode}
+					/>
 
 					<p className='second_heading'>Your Transactions:</p>
 
-					<AllTransactions />
+					<AllTransactions setEditMode={setEditMode} />
 				</div>
 			</div>
 

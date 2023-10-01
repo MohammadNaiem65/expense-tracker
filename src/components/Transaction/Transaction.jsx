@@ -1,9 +1,17 @@
+import { useDispatch } from 'react-redux';
+import { setEditModeDetails } from '../../features/transactions/transactionsSlice';
 import editImg from '../../assets/edit.svg';
 import deleteImg from '../../assets/delete.svg';
 
-export default function Transaction({ details }) {
+export default function Transaction({ details, setEditMode }) {
 	// ! Required hooks and variables
-	const { id, name, type, amount } = details;
+	const dispatch = useDispatch();
+	const { name, type, amount } = details;
+
+	const handleSetEditMode = () => {
+		dispatch(setEditModeDetails(details));
+		setEditMode(true);
+	};
 
 	return (
 		<li
@@ -13,7 +21,7 @@ export default function Transaction({ details }) {
 			<p>{name}</p>
 			<div className='right'>
 				<p>৳ {amount}</p>
-				<button className='link'>
+				<button className='link' onClick={handleSetEditMode}>
 					<img className='icon' src={editImg} />
 				</button>
 				<button className='link'>
