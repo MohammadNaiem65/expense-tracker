@@ -23,6 +23,12 @@
       "type": "expense",
       "amount": 20000,
       "id": 6
+    },
+    {
+      "name": "spend",
+      "type": "expense",
+      "amount": 9000,
+      "id": 7
     }
   ]
 }

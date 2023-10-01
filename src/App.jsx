@@ -2,10 +2,21 @@ import { useState } from 'react';
 import './App.css';
 import AllTransactions from './components/AllTransactions/AllTransactions';
 import TransactionForm from './components/TransactionForm/TransactionForm';
+import { useSelector } from 'react-redux';
 
 function App() {
 	// ! Required hooks and variables
+	const { transactions } = useSelector((state) => state.transactions);
 	const [editMode, setEditMode] = useState(false);
+
+	const totalTransaction = transactions.reduce((total, curr) => {
+		if (curr.type === 'income') {
+			return (total += curr.amount);
+		} else {
+			return (total -= curr.amount);
+		}
+	}, 0);
+
 	return (
 		<div className='App'>
 			{/* Header */}
@@ -19,8 +30,8 @@ function App() {
 					<div className='top_card'>
 						<p>Your Current Balance</p>
 						<h3>
-							<span>৳</span>
-							<span>10500</span>
+							<span>৳ </span>
+							<span>{totalTransaction}</span>
 						</h3>
 					</div>
 
