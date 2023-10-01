@@ -1,23 +1,43 @@
-import editImg from '../../assets/edit.svg';
-import deleteImg from '../../assets/delete.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import Transaction from '../Transaction/Transaction';
+import { useEffect } from 'react';
+import { getTransactions } from '../../features/transactions/transactionsSlice';
 
 export default function AllTransactions() {
+	// ! Required hooks and variables
+	const dispatch = useDispatch();
+	const { transactions, isLoading, isError, error } = useSelector(
+		(state) => state.transactions
+	);
+
+	// get all transactions
+	useEffect(() => {
+		dispatch(getTransactions());
+	}, [dispatch]);
+
+	// ! decide what to render
+	let content = null;
+	if (isLoading) {
+		content = (
+			<h3 className='text-xl text-gray-500 font-bold'>Loading...</h3>
+		);
+	} else if (!isLoading && isError) {
+		content = <h3 className='text-xl text-red-400 font-bold'>{error}</h3>;
+	} else if (!isLoading && transactions.length === 0) {
+		content = (
+			<h3 className='text-xl text-gray-500 font-bold'>
+				Have no data to display.
+			</h3>
+		);
+	} else if (!isLoading && transactions.length > 0) {
+		content = transactions.map((transaction) => (
+			<Transaction key={transaction.id} details={transaction} />
+		));
+	}
+
 	return (
 		<div className='conatiner_of_list_of_transactions'>
-			<ul>
-				<li className='transaction income'>
-					<p>Earned this month</p>
-					<div className='right'>
-						<p>৳ 100</p>
-						<button className='link'>
-							<img className='icon' src={editImg} />
-						</button>
-						<button className='link'>
-							<img className='icon' src={deleteImg} />
-						</button>
-					</div>
-				</li>
-			</ul>
+			<ul>{content}</ul>
 		</div>
 	);
 }
