@@ -1,16 +1,23 @@
 import { useDispatch } from 'react-redux';
-import { setEditModeDetails } from '../../features/transactions/transactionsSlice';
+import {
+	removeTransaction,
+	setEditModeDetails,
+} from '../../features/transactions/transactionsSlice';
 import editImg from '../../assets/edit.svg';
 import deleteImg from '../../assets/delete.svg';
 
 export default function Transaction({ details, setEditMode }) {
 	// ! Required hooks and variables
 	const dispatch = useDispatch();
-	const { name, type, amount } = details;
+	const { name, type, amount, id } = details;
 
 	const handleSetEditMode = () => {
 		dispatch(setEditModeDetails(details));
 		setEditMode(true);
+	};
+
+	const handleRemoveTransaction = () => {
+		dispatch(removeTransaction(id));
 	};
 
 	return (
@@ -24,7 +31,7 @@ export default function Transaction({ details, setEditMode }) {
 				<button className='link' onClick={handleSetEditMode}>
 					<img className='icon' src={editImg} />
 				</button>
-				<button className='link'>
+				<button className='link' onClick={handleRemoveTransaction}>
 					<img className='icon' src={deleteImg} />
 				</button>
 			</div>

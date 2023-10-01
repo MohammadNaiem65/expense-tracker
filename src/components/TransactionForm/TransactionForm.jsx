@@ -17,6 +17,12 @@ export default function TransactionForm({ editMode, setEditMode }) {
 	const [type, setType] = useState('');
 	const [amount, setAmount] = useState('');
 
+	const reset = () => {
+		setName('');
+		setType('');
+		setAmount('');
+	};
+
 	const handlePostTransaction = (e) => {
 		e.preventDefault();
 
@@ -27,7 +33,7 @@ export default function TransactionForm({ editMode, setEditMode }) {
 		};
 
 		dispatch(addTransaction(data));
-		e.target.reset();
+		reset();
 	};
 
 	const handleEditTransaction = (e) => {
@@ -43,6 +49,7 @@ export default function TransactionForm({ editMode, setEditMode }) {
 
 		dispatch(setEditModeDetails({}));
 		setEditMode(false);
+		reset();
 	};
 
 	const handleCancelEditTransaction = () => {
